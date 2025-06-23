@@ -1,11 +1,13 @@
 import { useState, useRef, forwardRef, useEffect } from "react";
-import { Sun, Moon, Download, Mail, Github, Linkedin } from "lucide-react";
+import { Sun, Moon, Download, Github, Linkedin } from "lucide-react";
 import { motion } from "framer-motion";
 import Cookies from "js-cookie";
-import "@fontsource/jetbrains-mono";
 import Logo from "../assets/logo.svg";
 
-function Tag({ label, color = "green" }: { label: string; color?: string }) {
+function Tag({
+  label,
+  color = "green",
+}: Readonly<{ label: string; color?: string }>) {
   const baseStyles = {
     green: "bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-200",
     yellow:
@@ -32,10 +34,10 @@ function Tag({ label, color = "green" }: { label: string; color?: string }) {
 function Card({
   children,
   className = "",
-}: {
+}: Readonly<{
   children: React.ReactNode;
   className?: string;
-}) {
+}>) {
   return (
     <div
       className={`rounded-xl p-4 ring-1 ring-inset ring-gray-200 dark:ring-gray-700 hover:scale-[1.02] transition-all duration-700 bg-white/5 dark:bg-white/5 border text-green-600 dark:text-green-400 will-change-transform ${className}`}
@@ -45,17 +47,17 @@ function Card({
   );
 }
 
-function CardContent({
-  children,
-  className = "",
-}: {
+type ButtonProps = {
   children: React.ReactNode;
+  onClick?: () => void;
+  href?: string;
+  variant?: "solid" | "ghost" | "outline";
+  disabled?: boolean;
   className?: string;
-}) {
-  return <div className={className}>{children}</div>;
-}
+  ariaLabel?: string;
+};
 
-const Button = forwardRef(
+const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
   (
     {
       children,
@@ -65,7 +67,7 @@ const Button = forwardRef(
       disabled = false,
       className = "",
       ariaLabel,
-    }: any,
+    },
     ref
   ) => {
     const base =
@@ -76,7 +78,7 @@ const Button = forwardRef(
       outline:
         "border border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white",
     };
-    const finalClassName = `${base} ${styles[variant] || styles.solid} ${
+    const finalClassName = `${base} ${styles[variant] ?? styles.solid} ${
       disabled ? "opacity-50 pointer-events-none" : ""
     } ${className}`;
 
@@ -85,8 +87,8 @@ const Button = forwardRef(
         href={href}
         className={finalClassName}
         download
-        ref={ref as any}
-        aria-label={ariaLabel || undefined}
+        ref={ref as React.Ref<HTMLAnchorElement>}
+        aria-label={ariaLabel ?? undefined}
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -96,9 +98,9 @@ const Button = forwardRef(
       <button
         onClick={onClick}
         className={finalClassName}
-        ref={ref as any}
+        ref={ref as React.Ref<HTMLButtonElement>}
         disabled={disabled}
-        aria-label={ariaLabel || undefined}
+        aria-label={ariaLabel ?? undefined}
       >
         {children}
       </button>
@@ -109,7 +111,7 @@ const Button = forwardRef(
 export default function Portfolio() {
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
-      const stored = Cookies.get("theme") || localStorage.getItem("theme");
+      const stored = Cookies.get("theme") ?? localStorage.getItem("theme");
       if (stored) return stored === "dark";
       const systemPrefersDark = window.matchMedia(
         "(prefers-color-scheme: dark)"
@@ -137,6 +139,11 @@ export default function Portfolio() {
   };
 
   const [showMore, setShowMore] = useState(false);
+
+  const emailUser = "ferguson_bryce";
+  const emailDomain = "yahoo.com";
+  const subject = encodeURIComponent("Enquiry from ByteOfCode.dev");
+  const mailtoLink = `mailto:${emailUser}@${emailDomain}?subject=${subject}`;
 
   return (
     <div
@@ -198,7 +205,8 @@ export default function Portfolio() {
             </Button>
             <Button
               variant="outline"
-              onClick={() => alert("Contact modal coming soon")}
+              onClick={() => (window.location.href = mailtoLink)}
+              aria-label="Email Bryce"
             >
               Contact Me
             </Button>
@@ -458,7 +466,7 @@ export default function Portfolio() {
                 </Card>
                 <Card className="border border-purple-500">
                   <h3 className="text-lg font-semibold">
-                    ChatFind – DevOps Manager
+                    ChatFind – DevOps Manager{" "}
                     <span className="block text-sm text-gray-500 dark:text-gray-300">
                       Nov 2015 – Feb 2016
                     </span>
@@ -473,7 +481,7 @@ export default function Portfolio() {
                 </Card>
                 <Card className="border border-indigo-500">
                   <h3 className="text-lg font-semibold">
-                    Liquid Edge Solutions – Full-stack Developer
+                    Liquid Edge Solutions – Full-stack Developer{" "}
                     <span className="block text-sm text-gray-500 dark:text-gray-300">
                       2012 – 2015
                     </span>
@@ -494,7 +502,7 @@ export default function Portfolio() {
                 </Card>
                 <Card className="border border-emerald-500">
                   <h3 className="text-lg font-semibold">
-                    Sozo Web Design – Head Developer
+                    Sozo Web Design – Head Developer{" "}
                     <span className="block text-sm text-gray-500 dark:text-gray-300">
                       2009 – 2012
                     </span>
@@ -528,25 +536,18 @@ export default function Portfolio() {
 
         <footer className="flex justify-center gap-6 py-10 text-gray-400">
           <a
-            href="#"
+            href="https://github.com/bryce-dev101"
             className="hover:text-pink-400 transition-colors"
             aria-label="GitHub"
           >
             <Github size={20} />
           </a>
           <a
-            href="#"
+            href="https://www.linkedin.com/in/bryce-ferguson-36566156/"
             className="hover:text-pink-400 transition-colors"
             aria-label="LinkedIn"
           >
             <Linkedin size={20} />
-          </a>
-          <a
-            href="#"
-            className="hover:text-pink-400 transition-colors"
-            aria-label="Email"
-          >
-            <Mail size={20} />
           </a>
         </footer>
       </div>
