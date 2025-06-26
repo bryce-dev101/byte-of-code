@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-import { Download } from "lucide-react";
 import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 import { Button } from "../components/ui/Button";
-import { Header } from "../components/Header";
+import { Header } from "../components/ui/Header";
 import { AboutSection } from "../components/AboutSection";
 import { SkillsSection } from "../components/SkillsSection";
 import { ExperienceSection } from "../components/ExperienceSection";
-import { Footer } from "../components/Footer";
+import { Footer } from "../components/ui/Footer";
+import { DownloadCVButton } from "../components/ui/DownloadButton";
 
 export default function Portfolio() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -68,10 +68,7 @@ export default function Portfolio() {
           />
 
           <div className="flex gap-4 flex-wrap ">
-            <Button variant="solid" href="/Bryce_Ferguson_Resume_Styled.pdf">
-              <Download className="mr-2 h-4 w-4" />
-              Download CV
-            </Button>
+            <DownloadCVButton />
             <Button
               variant="outline"
               onClick={() => (window.location.href = mailtoLink)}

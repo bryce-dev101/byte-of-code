@@ -1,5 +1,5 @@
-import { Tag } from "./Tag";
-import { Card } from "./Card";
+import { Tag } from "./ui/Tag";
+import { Card } from "./ui/Card";
 
 export function SkillsSection() {
   return (
