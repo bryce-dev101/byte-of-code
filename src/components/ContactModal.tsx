@@ -2,12 +2,17 @@ import { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail } from "lucide-react";
 
-export default function ContactModal({ open, onClose }) {
-  const backdrop = useRef(null);
+type ContactModalProps = {
+  open: boolean;
+  onClose: () => void;
+};
+
+export default function ContactModal({ open, onClose }: Readonly<ContactModalProps>) {
+  const backdrop = useRef<HTMLDialogElement | null>(null);
 
   useEffect(() => {
     // Close on Esc
-    function handleKey(e) {
+    function handleKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
     }
     if (open) window.addEventListener("keydown", handleKey);
@@ -18,22 +23,41 @@ export default function ContactModal({ open, onClose }) {
   useEffect(() => {
     if (!open) return;
     const firstInput = backdrop.current?.querySelector("input, textarea, button");
-    firstInput?.focus();
+    (firstInput as HTMLElement | null)?.focus();
   }, [open]);
 
   return (
     <AnimatePresence>
       {open && (
-        <motion.div
+        <dialog
           ref={backdrop}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center"
+          open={open}
+          className="fixed inset-0 z-50 p-0 border-0"
           aria-modal="true"
-          role="dialog"
-          onClick={onClose}
+          style={{ background: "transparent" }}
         >
+          {/* Backdrop button for accessibility */}
+          <button
+            type="button"
+            aria-label="Close modal"
+            tabIndex={0}
+            className="fixed inset-0 w-full h-full bg-black/50 cursor-default"
+            onClick={onClose}
+            onKeyDown={e => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onClose();
+              }
+            }}
+            style={{
+              position: "fixed",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              background: "rgba(0,0,0,0.5)",
+              zIndex: 0,
+            }}
+          />
           <motion.div
             initial={{ scale: 0.92, y: 40, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -92,7 +116,7 @@ export default function ContactModal({ open, onClose }) {
               </button>
             </form>
           </motion.div>
-        </motion.div>
+        </dialog>
       )}
     </AnimatePresence>
   );
