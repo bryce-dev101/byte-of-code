@@ -503,7 +503,7 @@ export const CVDocument = () => (
           {experiences.map((job) => (
             <View
               style={styles.experienceItem}
-              key={job.company + job.from + job.to}
+              key={job.company + job.date}
             >
               <View style={styles.jobStart} />
               <View style={styles.jobMain}>
@@ -530,8 +530,8 @@ export const CVDocument = () => (
         <Image src={logoSrc} style={styles.logo} />
         {/* Contacts */}
         <View style={styles.contacts}>
-          {contactDetails.map((c, idx) => (
-            <View style={styles.contactRow} key={idx}>
+          {contactDetails.map((c) => (
+            <View style={styles.contactRow} key={c.text}>
               <Image src={c.icon} style={styles.contactIcon} />
               <Text style={styles.contactText}>{c.text}</Text>
             </View>
