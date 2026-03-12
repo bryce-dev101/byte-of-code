@@ -284,7 +284,7 @@ const experiences = [
     company: "PayFast",
     location: "Cape Town, South Africa",
     title: "Senior Developer",
-    date: "June 2024 - Present",
+    date: "June 2024 - Sep 2025",
     companyDesc:
       "South Africa's leading online payment gateway, enabling secure, scalable e-commerce payments.",
     bullets: [
